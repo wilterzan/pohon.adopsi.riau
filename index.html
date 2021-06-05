@@ -20,6 +20,9 @@
             padding: 0;
             margin: 0;
         }
+        .leaflet-popup-content > table img {
+            width: 250px;
+        }
         </style>
         <title></title>
     </head>
@@ -836,12 +839,34 @@
         L.control.layers(baseMaps,{'Pohon Dewasa<br /><table><tr><td style="text-align: center;"><img src="legend/PohonDewasa_9_1646cm285pohon0.png" /></td><td>16 - 46 cm [285 pohon]</td></tr><tr><td style="text-align: center;"><img src="legend/PohonDewasa_9_4660cm318pohon1.png" /></td><td>46 - 60 cm [318 pohon]</td></tr><tr><td style="text-align: center;"><img src="legend/PohonDewasa_9_6076cm266pohon2.png" /></td><td>60 - 76 cm [266 pohon]</td></tr><tr><td style="text-align: center;"><img src="legend/PohonDewasa_9_76314cm265pohon3.png" /></td><td>76 - 314 cm [265 pohon]</td></tr></table>': cluster_PohonDewasa_9,'<img src="legend/PohonMuda_8.png" /> Pohon Muda': cluster_PohonMuda_8,'<img src="legend/HutanAdatPetapahan_7.png" /> Hutan Adat Petapahan ': layer_HutanAdatPetapahan_7,'<img src="legend/HutanAdatTerusan_6.png" /> Hutan Adat Terusan': layer_HutanAdatTerusan_6,'<img src="legend/UsulanHutanDesaTandun_5.png" /> Usulan Hutan Desa Tandun': layer_UsulanHutanDesaTandun_5,'<img src="legend/HutanAdatGajahBertalut_4.png" /> Hutan Adat Gajah Bertalut': layer_HutanAdatGajahBertalut_4,'<img src="legend/HutanAdatKampa_3.png" /> Hutan Adat Kampa': layer_HutanAdatKampa_3,"Peta Dasar (Google Satellite)": layer_PetaDasarGoogleSatellite_2,"Peta Dasar (Google Terrain)": layer_PetaDasarGoogleTerrain_1,"Peta Dasar (OSM Standard)": layer_PetaDasarOSMStandard_0,}).addTo(map);
         setBounds();
         map.addControl(new L.Control.Search({
-            layer: cluster_PohonMuda_8,
+            layer: L.layerGroup([cluster_PohonMuda_8,  cluster_PohonDewasa_9)],
             initial: false,
             hideMarkerOnCollapse: true,
+            textPlaceholder:'Cari berdasarkan kode pohon',
             propertyName: 'kode_pohon'}));
         document.getElementsByClassName('search-button')[0].className +=
          ' fa fa-binoculars';
+        map.addControl(new L.Control.Search({
+            layer: L.layerGroup([cluster_PohonMuda_8,  cluster_PohonDewasa_9)],
+            initial: false,
+            hideMarkerOnCollapse: true,
+            textPlaceholder: 'Cari berdasarkan nama lokal',
+            propertyName: 'nama_lokal'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        L.Control.Watermark=L.Control.extend({
+            onAdd:function(map){
+                var img = L.DomUtil.create('img');
+                img.src = 'logo_all.png';
+                img.style.width = '500px';
+                return img;
+            },
+            onRemove:function(map){},
+        });
+        L.control.watermark = function(opts){
+            return new L.Control.Watermark(opts);
+        }
+        L.control.watermark({position: 'bottomright'}).addTo(map);
         </script>
     </body>
 </html>
